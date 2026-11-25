@@ -1,0 +1,9 @@
+[Unit]
+Description=Reinicio nocturno del servidor (salud del dispositivo)
+
+[Service]
+Type=oneshot
+# Solo si lleva más de 1 hora encendido (evita bucles si el reloj va mal tras arrancar sin red)
+ExecCondition=/bin/sh -c 'test "$(cut -d. -f1 /proc/uptime)" -gt 3600'
+ExecStart=/usr/bin/logger -t reinicio-nocturno "Reinicio programado"
+ExecStart=/usr/bin/systemctl reboot

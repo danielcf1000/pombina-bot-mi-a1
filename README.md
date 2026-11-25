@@ -11,7 +11,8 @@ Sin Raspberry Pi, sin VPS, sin cuotas: un móvil del cajón, enchufado y conecta
 │  systemd                 │ ◀── Open-Meteo ──── │   viento      │
 │  ├─ pombina-bot (Python) │                     │  #servidor    │
 │  ├─ bateria-servidor     │                     └───────────────┘
-│  └─ servidor-sin-reposo  │
+│  ├─ servidor-sin-reposo  │
+│  └─ reinicio-nocturno    │
 └──────────────────────────┘
 ```
 
@@ -32,6 +33,7 @@ Los criterios son los de la pista (orientación 07/25, límites de viento medio,
 - **Nunca duerme**: el móvil se reiniciaba cada vez que la interfaz intentaba suspenderlo. Un servicio mantiene un *wakelock* permanente y la suspensión de systemd está bloqueada ([`servidor/servidor-sin-reposo.service`](servidor/servidor-sin-reposo.service)).
 - **Cuida la batería** (siempre enchufado = riesgo de que se hinche): el driver de carga no deja fijar voltaje ni umbral, así que un script **corta la carga al 80 % y la reanuda al 60 %**, con corriente de carga reducida a 700 mA ([`servidor/bateria-servidor.sh`](servidor/bateria-servidor.sh), cada 2 min con un *timer* de systemd).
 - **Avisa por Discord** en un canal privado `#servidor` si se va la luz o se desenchufa, si la batería baja del 30 % o si pasa de 45 °C.
+- **Se reinicia cada noche** a las 04:00 (hora de Madrid) para mantenerse fresco; tarda ~1 minuto y todo vuelve solo ([`servidor/reinicio-nocturno.timer`](servidor/reinicio-nocturno.timer)). Solo lo hace si lleva más de 1 h encendido, para evitar bucles si el reloj va mal.
 - **SSH solo con llave** (sin contraseñas ni root).
 - **Arranca solo**: si se reinicia, el bot vuelve a estar en línea sin tocar nada.
 
@@ -79,7 +81,7 @@ docs/         Guía completa para convertir el Mi A1 en servidor
    sudo install -m 755 servidor/bateria-servidor.sh /usr/local/bin/
    sudo cp servidor/*.service servidor/*.timer /etc/systemd/system/
    sudo systemctl daemon-reload
-   sudo systemctl enable --now servidor-sin-reposo.service bateria-servidor.timer
+   sudo systemctl enable --now servidor-sin-reposo.service bateria-servidor.timer reinicio-nocturno.timer
    sudo systemctl mask sleep.target suspend.target
    sudo cp servidor/10-solo-llave.conf /etc/ssh/sshd_config.d/   # ¡antes, comprueba que entras con llave!
    ```
