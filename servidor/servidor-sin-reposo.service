@@ -1,0 +1,12 @@
+[Unit]
+Description=Mantener el movil despierto (servidor): wakelock permanente
+DefaultDependencies=no
+After=local-fs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'echo servidor_sin_reposo > /sys/power/wake_lock'
+
+[Install]
+WantedBy=multi-user.target

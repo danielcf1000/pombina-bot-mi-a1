@@ -1,0 +1,6 @@
+[Unit]
+Description=Cuidado de la batería del servidor (límite de carga y avisos)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/bateria-servidor.sh

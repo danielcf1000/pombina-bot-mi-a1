@@ -1,0 +1,15 @@
+[Unit]
+Description=Bot de Discord del Club A Pombiña
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=USUARIO
+WorkingDirectory=/home/USUARIO/bot-pombina
+ExecStart=/home/USUARIO/bot-pombina/venv/bin/python bot.py
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
