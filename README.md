@@ -52,8 +52,8 @@ Los criterios son los de la pista (orientación 07/25, límites de viento medio,
 ```
 bot/          El bot de Discord (bot.py, viento.py) y su servicio systemd
 servidor/     Servicios del móvil: sin reposo, cuidado de batería, SSH solo con llave
-herramientas/ img2simg.py (convertir imágenes a formato sparse, ver la guía)
-docs/         Guía completa para convertir el Mi A1 en servidor
+herramientas/ img2simg.py (convertir imágenes a formato sparse, ver la guía), subir-surf.ps1
+docs/         Guía completa para convertir el Mi A1 en servidor; surf-galicia.md (web con Tailscale Funnel)
 ```
 
 ## Instalación
@@ -87,6 +87,10 @@ docs/         Guía completa para convertir el Mi A1 en servidor
    ```
 
 Comandos útiles: `systemctl status pombina-bot`, `journalctl -u pombina-bot -f`, `journalctl -t bateria-servidor`.
+
+## Extra: una web servida desde el móvil
+
+El mismo Mi A1 también publica una web estática (la app **Surf Galicia**, una PWA con el parte de olas) por HTTPS con **Tailscale Funnel** en `https://a1.<tailnet>.ts.net`. No hace falta abrir puertos ni tener dominio propio → [docs/surf-galicia.md](docs/surf-galicia.md). Para subir la app: [`herramientas/subir-surf.ps1`](herramientas/subir-surf.ps1).
 
 ## Seguridad
 
